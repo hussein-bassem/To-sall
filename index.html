@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إلى فطومة ❤</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Cairo",sans-serif;
+    min-height:100vh;
+    background:#000; /* خلفية سوداء */
+    overflow:hidden;
+    color:#333;
+    position: relative;
+}
+
+.app{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    position: relative;
+    z-index: 10;
+}
+
+.container{
+    width:min(430px,100%);
+    display:grid;
+    position:relative;
+}
+
+.screen{
+    grid-area: 1 / 1;
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(255,255,255,.1);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    padding:30px 22px;
+
+    opacity:0;
+    pointer-events:none;
+    transform:scale(1.05) translateY(20px);
+    filter:blur(8px);
+
+    transition:
+        opacity .6s ease,
+        transform .7s ease,
+        filter .6s ease;
+}
+
+.screen.active{
+    opacity:1;
+    pointer-events:auto;
+    transform:scale(1) translateY(0);
+    filter:blur(0);
+}
+
+/* إطار الصور */
+.art{
+    width:220px;
+    height:220px;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border-radius:20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    border: 2px solid #d63384;
+}
+
+.art img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* العناوين */
+h1{
+    font-size:24px;
+    line-height:1.6;
+    color:#d63384;
+    margin-bottom:15px;
+    font-weight:800;
+    min-height: 40px;
+}
+
+/* حاوية الأزرار */
+.btn-group{
+    display:flex;
+    gap:15px;
+    margin-top:15px;
+    width: 100%;
+    justify-content: center;
+    position: relative;
+    min-height: 60px;
+}
+
+/* الأزرار الأساسية */
+button.main-btn{
+    border:none;
+    outline:none;
+    padding:12px 32px;
+    border-radius:50px;
+    background:linear-gradient(135deg,#ec4899,#d63384);
+    color:white;
+    font-family:inherit;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+    transition: all .3s ease;
+    box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+}
+
+button.main-btn:active{
+    transform:scale(.95);
+}
+
+/* زر "لا" الهارب */
+button.main-btn.btn-no {
+    background: #555;
+    position: absolute;
+    transition: all 0.15s ease-out;
+    white-space: nowrap;
+}
+
+.btn-yes {
+    position: absolute;
+    right: calc(50% + 10px);
+}
+
+.btn-no-init {
+    left: calc(50% + 10px);
+}
+
+/* الرسالة النهائية */
+.message-card{
+    width:100%;
+    background:rgba(255,255,255,.95);
+    border-radius:25px;
+    text-align:center;
+    padding: 10px;
+}
+
+.message-card p{
+    font-size:18px;
+    line-height:1.9;
+    color:#333;
+    font-weight: 600;
+    white-space:pre-line;
+}
+
+/* القلوب والورود المتساقطة */
+.floating-item{
+    position:fixed;
+    top:-50px;
+    pointer-events:none;
+    animation:fall linear forwards;
+    z-index:1;
+    opacity: 0.85;
+}
+
+@keyframes fall{
+    0%{
+        transform:translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    100%{
+        transform:translateY(105vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* مؤشر الكتابة */
+.typing::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+}
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+@media(max-width:500px){
+    .art{
+        width:190px;
+        height:190px;
+    }
+    h1{
+        font-size:21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ملف الأغنية (تشتغل أول ما تلمس الشاشة) -->
+<audio id="bgSong" src="song.mp3" loop></audio>
+
+<div class="app">
+
+<div class="container">
+
+    <!-- الشاشة 1: البداية -->
+    <section class="screen active" id="screen1">
+        <div class="art">
+            <img src="images/01.jpg" alt="صورة 1">
+        </div>
+        <h1 class="typing" data-text="شلونج فطومه؟ 🌚"></h1>
+        <div class="btn-group">
+            <button class="main-btn" onclick="nextScreen(2)">زينه</button>
+        </div>
+    </section>
+
+    <!-- الشاشة 2: طلب السؤال -->
+    <section class="screen" id="screen2">
+        <div class="art">
+            <img src="images/02.jpg" alt="صورة 2">
+        </div>
+        <h1 class="typing" data-text="اريد اسئلج سؤال 😇"></h1>
+        <div class="btn-group">
+            <button class="main-btn" onclick="nextScreen(3)">اسئل</button>
+        </div>
+    </section>
+
+    <!-- الشاشة 3: السؤال (زر لا يهرب) -->
+    <section class="screen" id="screen3">
+        <div class="art">
+            <img src="images/03.jpg" alt="صورة 3">
+        </div>
+        <h1 class="typing" data-text="هم تشتاقين ل عباس؟ 🥺💔"></h1>
+        <div class="btn-group" id="run-container-1">
+            <button class="main-btn btn-yes" onclick="nextScreen(4)">اي</button>
+            <button class="main-btn btn-no btn-no-init" id="run-btn-1">لا</button>
+        </div>
+    </section>
+
+    <!-- الشاشة 4: منو عباس؟ (زر لا يهرب) -->
+    <section class="screen" id="screen4">
+        <div class="art">
+            <img src="images/04.jpg" alt="صورة 4">
+        </div>
+        <h1 class="typing" data-text="زين منو عباس؟ 🤔"></h1>
+        <div class="btn-group" id="run-container-2">
+            <button class="main-btn btn-yes" onclick="nextScreen(5)">غلاي</button>
+            <button class="main-btn btn-no btn-no-init" id="run-btn-2">ما اعرفه</button>
+        </div>
+    </section>
+
+    <!-- الشاشة 5: الرسالة النهائية -->
+    <section class="screen" id="screen5">
+        <div class="art">
+            <img src="images/05.jpg" alt="صورة 5">
+        </div>
+        <div class="message-card">
+            <h1 style="font-size: 20px; margin-bottom: 10px;">❤️ عباس يگولج: ❤️</h1>
+            <p class="typing" data-text="هم هوه مشتاقلج هواي ومنتضرج تراضينه..
+صح زعلان منج بس انا احتاجج واحبج ومكدر انساج..
+يروح عباس 🫂❤️‍🔥"></p>
+        </div>
+    </section>
+
+</div>
+
+</div>
+
+
+<script>
+
+let currentScreen = 1;
+
+// تشغيل الأغنية من أول كليك أو لمسة
+const audio = document.getElementById("bgSong");
+function playAudio() {
+    if (audio) {
+        audio.play().catch(() => {});
+    }
+}
+document.addEventListener("click", playAudio, { once: true });
+document.addEventListener("touchstart", playAudio, { once: true });
+
+// دالة الكتابة التدريجية
+function typeEffect(element, speed) {
+    const text = element.getAttribute('data-text');
+    element.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(timer);
+            element.classList.remove('typing');
+        }
+    }, speed);
+}
+
+function runTypingForCurrentScreen() {
+    const activeScreen = document.querySelector('.screen.active');
+    const typingElement = activeScreen.querySelector('.typing');
+    if (typingElement) {
+        typingElement.classList.add('typing');
+        typeEffect(typingElement, 60);
+    }
+}
+
+function nextScreen(screenNumber) {
+    if(currentScreen === 3) disableRunBtn(1);
+    if(currentScreen === 4) disableRunBtn(2);
+
+    const currentSvg = document.getElementById(`screen${currentScreen}`);
+    const nextSvg = document.getElementById(`screen${screenNumber}`);
+
+    currentSvg.classList.remove('active');
+    
+    setTimeout(() => {
+        nextSvg.classList.add('active');
+        currentScreen = screenNumber;
+        runTypingForCurrentScreen();
+        
+        if(screenNumber === 3) initRunBtn(1);
+        if(screenNumber === 4) initRunBtn(2);
+
+    }, 100);
+}
+
+
+// منطق الزر الهارب
+function initRunBtn(id) {
+    const btnNo = document.getElementById(`run-btn-${id}`);
+    const container = document.getElementById(`run-container-${id}`);
+
+    const moveButton = (e) => {
+        const containerRect = container.getBoundingClientRect();
+        const btnRect = btnNo.getBoundingClientRect();
+
+        const maxTop = containerRect.height - btnRect.height;
+        const maxLeft = containerRect.width - btnRect.width;
+
+        let randomTop = Math.random() * maxTop;
+        let randomLeft = Math.random() * maxLeft;
+        
+        randomTop = Math.max(0, Math.min(randomTop, maxTop));
+        randomLeft = Math.max(0, Math.min(randomLeft, maxLeft));
+
+        btnNo.style.transition = 'all 0.1s ease-out';
+        btnNo.style.top = `${randomTop}px`;
+        btnNo.style.left = `${randomLeft}px`;
+        
+        btnNo.classList.remove('btn-no-init');
+        btnNo.classList.remove('btn-yes');
+    };
+
+    btnNo.addEventListener('mouseover', moveButton);
+    btnNo.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        moveButton(e);
+    });
+
+    btnNo._moveHandler = moveButton;
+}
+
+function disableRunBtn(id) {
+    const btnNo = document.getElementById(`run-btn-${id}`);
+    if(btnNo && btnNo._moveHandler) {
+        btnNo.removeEventListener('mouseover', btnNo._moveHandler);
+        btnNo.removeEventListener('touchstart', btnNo._moveHandler);
+    }
+}
+
+
+// تساقط الورود والقلوب
+function createFallItem() {
+    const items = ["❤️","💗","🌹","🌸","🌺","🌷"];
+    const item = document.createElement("div");
+    item.className = "floating-item";
+    
+    item.textContent = items[Math.floor(Math.random() * items.length)];
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.fontSize = (Math.random() * 18 + 15) + "px";
+    item.style.animationDuration = (Math.random() * 3 + 4) + "s";
+    
+    document.body.appendChild(item);
+    
+    setTimeout(() => {
+        item.remove();
+    }, 7000);
+}
+
+setInterval(createFallItem, 400);
+
+window.onload = runTypingForCurrentScreen;
+
+</script>
+
+</body>
+</html>
