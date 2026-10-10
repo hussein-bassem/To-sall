@@ -222,16 +222,16 @@ button.main-btn.btn-no {
 <!-- ملف الأغنية (تشتغل أول ما تلمس الشاشة) -->
 <audio id="bgSong" src="song.mp3" loop></audio>
 
-<!-- معرف التليغرام في الركن الفوق (ثابت وواضح) -->
-<div style="position: fixed; top: 15px; right: 15px; z-index: 9999;">
-    <a href="https://t.me/IBG6B" target="_blank" style="color: #fff; font-size: 14px; text-decoration: none; font-family: 'Cairo', sans-serif; background: rgba(214, 51, 132, 0.85); padding: 8px 16px; border-radius: 50px; border: 2px solid #fff; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-weight: 700;">
-        <span style="direction: ltr;">@IBG6B</span>
-    </a>
-</div>
-
 <div class="app">
 
-<div class="container">
+<div class="container" style="position: relative;">
+
+    <!-- معرف التليغرام في الركن الفوق داخل الكارت -->
+    <div style="position: absolute; top: -12px; right: 10px; z-index: 100;">
+        <a href="https://t.me/IBG6B" target="_blank" style="color: #fff; font-size: 13px; text-decoration: none; font-family: 'Cairo', sans-serif; background: #d63384; padding: 6px 14px; border-radius: 50px; border: 2px solid #fff; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-weight: 700;">
+            <span style="direction: ltr;">@IBG6B</span>
+        </a>
+    </div>
 
     <!-- الشاشة 1: البداية -->
     <section class="screen active" id="screen1">
